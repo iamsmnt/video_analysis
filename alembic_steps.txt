@@ -1,0 +1,33 @@
+1. Install Alembic and SQLAlchemy
+pip install alembic sqlalchemy
+
+2. Set Up Alembic
+In your project directory:
+alembic init alembic
+This creates an alembic/ directory and an alembic.ini config file.
+
+3. Configure Alembic to Work with FastAPI’s DB Models
+In alembic/env.py, modify this par
+# target_metadata = None
+        -to-
+from yourapp.models import Base  # Update with your actual path
+target_metadata = Base.metadata
+
+4. create your models
+Example: app/models.py
+from sqlalchemy import Column, Integer, String
+from sqlalchemy.ext.declarative import declarative_base
+
+Base = declarative_base()
+
+class User(Base):
+    __tablename__ = "users"
+
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String, index=True)
+    email = Column(String, unique=True, index=True)
+
+
+5. generate migration script
+If you've created/updated models and want Alembic to generate a migration:
+alembic revision --autogenerate -m "create users table"

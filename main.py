@@ -6,9 +6,18 @@ from datetime import datetime, timedelta
 import shutil
 import os
 from fastapi.testclient import TestClient
+from db.connection import init_connection_pool, close_connection_pool, get_db_connection
+
+
+
+
 
 # FastAPI App
 app = FastAPI()
+
+# Initialize pool at app startup
+init_connection_pool()
+
 
 # Secret key for JWT
 SECRET_KEY = "your_secret_key"
@@ -62,6 +71,16 @@ def create_user(username: str, password: str, role: str = "user"):
     if username in fake_users_db:
         raise HTTPException(status_code=400, detail="User already exists")
     hashed_password = get_password_hash(password)
+
+    # Example query
+    with get_db_connection() as conn:
+        with conn.cursor() as cur:
+            cur.execute("SELECT NOW();")
+            print(cur.fetchone())
+
+    # Close pool at app shutdown
+    close_connection_pool()
+
     fake_users_db[username] = {"username": username, "password": hashed_password, "role": role}
     return {"message": "User created successfully"}
 
