@@ -11,6 +11,13 @@ kubectl get svc fastapi-service
 #apply ingress(optional)
 kubectl apply -f ingress.yaml
 
+
+#docker build command
+docker build -t fastapi-video-analysis .
+
+#docker repo push 
+docker push dockersmnt/fastapi-video-analysis:latest
+
 #docker image pull
 docker pull dockersmnt/fastapi-video-analysis:latest
 
