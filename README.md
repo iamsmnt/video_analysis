@@ -1,4 +1,4 @@
-#VINEX.AI
+# VINEX.AI
 
 ## 🎯 Potential Value Adds & Use Cases
 
